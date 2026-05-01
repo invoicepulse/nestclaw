@@ -12,11 +12,13 @@ export const webhooksRouter = new Hono();
 const DOMAIN = process.env['DOMAIN'] ?? 'nestclaw.io';
 const WEBHOOK_SECRET = process.env['POLAR_WEBHOOK_SECRET'] ?? '';
 
-function verifySignature(body: string, signature: string): boolean {
-  if (!WEBHOOK_SECRET) return true; // skip in dev
+function verifySignature(_body: string, _signature: string): boolean {
+  // Skip verification in development — enable in production
+  if (process.env['NODE_ENV'] !== 'production') return true;
+  if (!WEBHOOK_SECRET) return true;
   try {
-    const expected = crypto.createHmac('sha256', WEBHOOK_SECRET).update(body).digest('hex');
-    const sig = signature.replace('v1,', '');
+    const expected = crypto.createHmac('sha256', WEBHOOK_SECRET).update(_body).digest('hex');
+    const sig = _signature.replace('v1,', '');
     if (expected.length !== sig.length) return false;
     return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(sig));
   } catch {

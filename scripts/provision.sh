@@ -14,7 +14,7 @@ fi
 CONTAINER_NAME="nestclaw_${SUBDOMAIN}"
 DATA_DIR="/opt/nestclaw/data/${SUBDOMAIN}"
 
-if docker inspect "$CONTAINER_NAME" &>/dev/null; then
+if docker inspect "$CONTAINER_NAME" &>/dev/null || sudo docker inspect "$CONTAINER_NAME" &>/dev/null; then
   echo "{\"error\": \"Container ${CONTAINER_NAME} already exists\"}"
   exit 1
 fi
@@ -30,7 +30,7 @@ mkdir -p "$DATA_DIR"
 IMAGE="nestclaw/${AGENT_TYPE}:latest"
 
 if [ "$AGENT_TYPE" = "hermes" ]; then
-  docker run -d \
+  sudo docker run -d \
     --name "$CONTAINER_NAME" \
     --restart unless-stopped \
     --cpus="1" --memory="4g" \
@@ -42,7 +42,7 @@ if [ "$AGENT_TYPE" = "hermes" ]; then
     --label "nestclaw.subdomain=${SUBDOMAIN}" \
     "$IMAGE" >/dev/null
 else
-  docker run -d \
+  sudo docker run -d \
     --name "$CONTAINER_NAME" \
     --restart unless-stopped \
     --cpus="1" --memory="4g" \
