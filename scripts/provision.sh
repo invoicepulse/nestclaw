@@ -19,11 +19,24 @@ if docker inspect "$CONTAINER_NAME" &>/dev/null; then
   exit 1
 fi
 
-TERMINAL_PORT=$("$SCRIPT_DIR/find-free-port.sh" 10000 19999)
+# Find free port - simple approach using seq and checking with ss
+find_port() {
+  local START=$1 END=$2
+  for port in $(seq "$START" "$END"); do
+    if ! ss -tlnp 2>/dev/null | grep -q ":${port} "; then
+      echo "$port"
+      return 0
+    fi
+  done
+  echo "0"
+  return 1
+}
+
+TERMINAL_PORT=$(find_port 10000 19999)
 WEBUI_PORT=""
 
 if [ "$AGENT_TYPE" = "hermes" ]; then
-  WEBUI_PORT=$("$SCRIPT_DIR/find-free-port.sh" 20000 29999)
+  WEBUI_PORT=$(find_port 20000 29999)
 fi
 
 mkdir -p "$DATA_DIR"
