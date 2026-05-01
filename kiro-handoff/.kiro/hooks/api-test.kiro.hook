@@ -1,0 +1,17 @@
+{
+  "name": "API Route Test Runner",
+  "description": "Runs TypeScript check and tests whenever an API route or service file is saved",
+  "version": "1",
+  "when": {
+    "type": "fileSaved",
+    "patterns": [
+      "apps/api/src/routes/**/*.ts",
+      "apps/api/src/services/**/*.ts",
+      "apps/api/src/middleware/**/*.ts"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "An API file was just saved. Do the following:\n1. Run `pnpm --filter api check` to verify TypeScript compiles\n2. If there are type errors, fix them immediately\n3. Run `pnpm --filter api test` to run unit tests\n4. If tests fail, fix the issue before continuing with other tasks\n5. Report: pass/fail for both checks"
+  }
+}

@@ -1,0 +1,40 @@
+{
+	admin localhost:2019
+	email admin@nestclaw.io
+}
+
+nestclaw.io {
+	root * /opt/nestclaw/web/dist
+	file_server
+	try_files {path} /index.html
+
+	handle /api/* {
+		reverse_proxy localhost:2222
+	}
+}
+
+*.nestclaw.io {
+	tls {
+		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+	}
+
+	@terminal host terminal.*.nestclaw.io
+	handle @terminal {
+		reverse_proxy localhost:7681 {
+			header_up Host {http.request.host}
+			header_up X-Real-IP {http.request.remote.host}
+		}
+	}
+
+	@webui host ui.*.nestclaw.io
+	handle @webui {
+		reverse_proxy localhost:5000 {
+			header_up Host {http.request.host}
+			header_up X-Real-IP {http.request.remote.host}
+		}
+	}
+
+	handle {
+		respond "Not Found" 404
+	}
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Docker Build Validator",
+  "description": "Validates Dockerfile syntax when Docker files are saved",
+  "version": "1.0.0",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "containers/**/Dockerfile",
+      "containers/**/start.sh"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A Docker file was saved. Do the following:\n1. Review the Dockerfile for any syntax issues or best practice violations\n2. Check that all EXPOSE ports match what start.sh actually runs\n3. Verify the start.sh script keeps the container alive (must not exit)\n4. If the Docker daemon is available locally, attempt `docker build` and report the result\n5. Fix any issues found"
+  }
+}
