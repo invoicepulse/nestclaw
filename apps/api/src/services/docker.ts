@@ -16,7 +16,7 @@ export async function provisionContainer(
   agentType: string
 ): Promise<ProvisionResult> {
   const { stdout, stderr } = await execAsync(
-    `sudo ${SCRIPTS_PATH}/provision.sh ${userId} ${subdomain} ${agentType}`,
+    `${SCRIPTS_PATH}/provision.sh ${userId} ${subdomain} ${agentType}`,
     { timeout: 60000 }
   );
   if (!stdout.trim()) throw new Error(`Provision failed: ${stderr}`);
@@ -25,13 +25,13 @@ export async function provisionContainer(
 
 export async function deprovisionContainer(subdomain: string, force = false): Promise<void> {
   const flag = force ? ' --force' : '';
-  await execAsync(`sudo ${SCRIPTS_PATH}/deprovision.sh ${subdomain}${flag}`, { timeout: 30000 });
+  await execAsync(`${SCRIPTS_PATH}/deprovision.sh ${subdomain}${flag}`, { timeout: 30000 });
 }
 
 export async function getContainerStatus(containerName: string): Promise<string> {
   try {
     const { stdout } = await execAsync(
-      `sudo docker inspect --format='{{.State.Status}}' ${containerName}`,
+      `docker inspect --format='{{.State.Status}}' ${containerName}`,
       { timeout: 10000 }
     );
     return stdout.trim();
