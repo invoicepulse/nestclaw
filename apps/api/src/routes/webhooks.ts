@@ -14,8 +14,14 @@ const WEBHOOK_SECRET = process.env['POLAR_WEBHOOK_SECRET'] ?? '';
 
 function verifySignature(body: string, signature: string): boolean {
   if (!WEBHOOK_SECRET) return true; // skip in dev
-  const expected = crypto.createHmac('sha256', WEBHOOK_SECRET).update(body).digest('hex');
-  return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature));
+  try {
+    const expected = crypto.createHmac('sha256', WEBHOOK_SECRET).update(body).digest('hex');
+    const sig = signature.replace('v1,', '');
+    if (expected.length !== sig.length) return false;
+    return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(sig));
+  } catch {
+    return false;
+  }
 }
 
 function generateSubdomain(): string {
