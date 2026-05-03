@@ -56,18 +56,23 @@ webhooksRouter.post('/polar', async (c) => {
       if (!user) {
         const [newUser] = await db.insert(users).values({
           email: customer.email,
-          supabase_id: customer.id,
+          supabase_id: customer.id || `test_${Date.now()}`,
           polar_customer_id: customer.id,
           agent_type: metadata?.agent_type ?? 'openclaw',
         }).returning();
         user = newUser!;
         log('info', 'User created', { userId: user.id });
       } else {
-        await db.update(users).set({ polar_customer_id: customer.id }).where(eq(users.id, user.id));
+        await db.update(users).set({ 
+          polar_customer_id: customer.id,
+          agent_type: metadata?.agent_type ?? user.agent_type 
+        }).where(eq(users.id, user.id));
         log('info', 'User updated', { userId: user.id });
+        // Re-fetch to get updated agent_type
+        [user] = await db.select().from(users).where(eq(users.id, user.id));
       }
 
-      const agentType = user.agent_type ?? 'openclaw';
+      const agentType = metadata?.agent_type ?? user.agent_type ?? 'openclaw';
 
       // Generate unique subdomain
       let subdomain = generateSubdomain();
