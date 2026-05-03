@@ -39,7 +39,7 @@ if [ "$AGENT_TYPE" = "hermes" ]; then
   WEBUI_PORT=$(find_port 20000 29999)
 fi
 
-mkdir -p "$DATA_DIR"
+# Docker will create the volume directory with correct ownership
 IMAGE="nestclaw/${AGENT_TYPE}:latest"
 
 if [ "$AGENT_TYPE" = "hermes" ]; then
