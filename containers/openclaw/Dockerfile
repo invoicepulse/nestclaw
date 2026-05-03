@@ -8,17 +8,16 @@ RUN npm install -g openclaw
 # Install Composio for integrations
 RUN npm install -g composio-core
 
-RUN useradd -m -s /bin/bash agent
+# Create user and set up home directory
+RUN useradd -m -s /bin/bash agent && \
+    mkdir -p /home/agent/.openclaw && \
+    chown -R agent:agent /home/agent
 
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
-# Switch to agent user BEFORE creating directories
 USER agent
 WORKDIR /home/agent
-
-# Now create config directory as agent user
-RUN mkdir -p .openclaw
 
 EXPOSE 7681
 CMD ["/start.sh"]
