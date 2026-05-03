@@ -1,3 +1,3 @@
 #!/bin/bash
-ttyd -p 7681 -W bash &
-wait -n
+echo "OpenClaw is installed. Run 'openclaw configure' to get started."
+exec ttyd -p 7681 -W bash

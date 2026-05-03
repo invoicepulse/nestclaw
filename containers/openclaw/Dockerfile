@@ -1,11 +1,22 @@
 FROM node:22-slim
-RUN apt-get update && apt-get install -y curl bash && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y curl bash git && rm -rf /var/lib/apt/lists/*
 RUN curl -sL https://github.com/tsl0922/ttyd/releases/download/1.7.7/ttyd.x86_64 -o /usr/local/bin/ttyd && chmod +x /usr/local/bin/ttyd
-RUN npm install -g @anthropic-ai/claude-code composio-core
+
+# Install OpenClaw globally
+RUN npm install -g openclaw
+
+# Install Composio for integrations
+RUN npm install -g composio-core
+
 RUN useradd -m -s /bin/bash agent
 WORKDIR /home/agent
+
+# Create config directory
+RUN mkdir -p /home/agent/.openclaw && chown -R agent:agent /home/agent
+
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
+
 USER agent
 EXPOSE 7681
 CMD ["/start.sh"]
