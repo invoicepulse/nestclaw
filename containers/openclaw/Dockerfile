@@ -13,11 +13,12 @@ RUN useradd -m -s /bin/bash agent
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
+# Switch to agent user BEFORE creating directories
 USER agent
 WORKDIR /home/agent
 
-# Create config directory as agent user (not root)
-RUN mkdir -p /home/agent/.openclaw
+# Now create config directory as agent user
+RUN mkdir -p .openclaw
 
 EXPOSE 7681
 CMD ["/start.sh"]
