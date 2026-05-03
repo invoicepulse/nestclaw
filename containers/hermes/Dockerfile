@@ -7,5 +7,6 @@ RUN useradd -m -s /bin/bash agent
 WORKDIR /home/agent
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
+USER agent
 EXPOSE 7681 5000
 CMD ["/start.sh"]
