@@ -2,8 +2,14 @@ FROM python:3.11-slim
 RUN apt-get update && apt-get install -y curl bash git xz-utils && rm -rf /var/lib/apt/lists/*
 RUN curl -sL https://github.com/tsl0922/ttyd/releases/download/1.7.7/ttyd.x86_64 -o /usr/local/bin/ttyd && chmod +x /usr/local/bin/ttyd
 
-# Install Hermes using official installer
+# Install Hermes using official installer (runs as root, installs to /usr/local)
 RUN curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
+
+# Add hermes to PATH for all users
+ENV PATH="/root/.local/bin:/usr/local/bin:${PATH}"
+
+# Make hermes accessible to agent user by symlinking
+RUN if [ -f /root/.local/bin/hermes ]; then ln -s /root/.local/bin/hermes /usr/local/bin/hermes; fi
 
 RUN useradd -m -s /bin/bash agent
 WORKDIR /home/agent
