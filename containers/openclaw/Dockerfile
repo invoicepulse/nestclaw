@@ -9,14 +9,15 @@ RUN npm install -g openclaw
 RUN npm install -g composio-core
 
 RUN useradd -m -s /bin/bash agent
-WORKDIR /home/agent
-
-# Create config directory with correct ownership
-RUN mkdir -p /home/agent/.openclaw && chown -R agent:agent /home/agent/.openclaw
 
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
 USER agent
+WORKDIR /home/agent
+
+# Create config directory as agent user (not root)
+RUN mkdir -p /home/agent/.openclaw
+
 EXPOSE 7681
 CMD ["/start.sh"]
