@@ -12,7 +12,7 @@ if [ -z "$USER_ID" ] || [ -z "$SUBDOMAIN" ] || [ -z "$AGENT_TYPE" ]; then
 fi
 
 CONTAINER_NAME="nestclaw_${SUBDOMAIN}"
-DATA_DIR="/opt/nestclaw/data/${SUBDOMAIN}"
+VOLUME_NAME="nestclaw_data_${SUBDOMAIN}"
 
 if docker inspect "$CONTAINER_NAME" &>/dev/null; then
   echo "{\"error\": \"Container ${CONTAINER_NAME} already exists\"}"
@@ -50,7 +50,7 @@ if [ "$AGENT_TYPE" = "hermes" ]; then
     --network nestclaw_net \
     -p "${TERMINAL_PORT}:7681" \
     -p "${WEBUI_PORT}:5000" \
-    -v "${DATA_DIR}:/home/agent/.hermes" \
+    -v "${VOLUME_NAME}:/home/agent/.hermes" \
     --label "nestclaw.user_id=${USER_ID}" \
     --label "nestclaw.subdomain=${SUBDOMAIN}" \
     "$IMAGE" >/dev/null
@@ -61,7 +61,7 @@ else
     --cpus="1" --memory="4g" \
     --network nestclaw_net \
     -p "${TERMINAL_PORT}:7681" \
-    -v "${DATA_DIR}:/home/agent/.openclaw" \
+    -v "${VOLUME_NAME}:/home/agent/.openclaw" \
     --label "nestclaw.user_id=${USER_ID}" \
     --label "nestclaw.subdomain=${SUBDOMAIN}" \
     "$IMAGE" >/dev/null
