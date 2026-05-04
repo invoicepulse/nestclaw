@@ -1,8 +1,14 @@
 #!/bin/bash
-echo "Starting OpenClaw Gateway..."
+# Start OpenClaw Gateway in background
 openclaw gateway run &
-GATEWAY_PID=$!
-sleep 3
-echo "OpenClaw Gateway running (PID: $GATEWAY_PID)"
-echo "Run 'openclaw configure' to set up your API keys, then 'openclaw' to start chatting."
+sleep 2
+
+echo ""
+echo "=========================================="
+echo "  OpenClaw is ready!"
+echo "  Run: openclaw setup   (first time)"
+echo "  Run: openclaw         (to chat)"
+echo "=========================================="
+echo ""
+
 exec ttyd -p 7681 -W bash
