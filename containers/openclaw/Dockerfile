@@ -20,4 +20,4 @@ USER agent
 WORKDIR /home/agent
 
 EXPOSE 7681
-CMD ["/start.sh"]
+ENTRYPOINT ["/start.sh"]
