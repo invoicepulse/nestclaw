@@ -1,6 +1,6 @@
 #!/bin/bash
 # Start OpenClaw Gateway with logging
-openclaw gateway --port 18789 > /tmp/openclaw-gateway.log 2>&1 &
+openclaw gateway --port 18789 --allow-unconfigured > /tmp/openclaw-gateway.log 2>&1 &
 GATEWAY_PID=$!
 sleep 3
 
