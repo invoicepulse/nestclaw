@@ -14,7 +14,7 @@ RUN useradd -m -s /bin/bash agent && \
     chown -R agent:agent /home/agent
 
 COPY start.sh /start.sh
-RUN chmod +x /start.sh
+RUN chmod +x /start.sh && echo "v2"
 
 USER agent
 WORKDIR /home/agent
