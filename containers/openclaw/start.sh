@@ -1,12 +1,12 @@
 #!/bin/bash
-# Start OpenClaw Gateway in background
-openclaw gateway run &
+# Run OpenClaw Gateway in background (container mode - no systemd)
+openclaw gateway --port 18789 &
 sleep 2
 
 echo ""
 echo "=========================================="
 echo "  OpenClaw is ready!"
-echo "  Run: openclaw setup   (first time)"
+echo "  Run: openclaw setup   (first time only)"
 echo "  Run: openclaw         (to chat)"
 echo "=========================================="
 echo ""
