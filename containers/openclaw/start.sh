@@ -1,10 +1,8 @@
 #!/bin/bash
-# Fix ownership of .openclaw directory if it exists
-if [ -d ~/.openclaw ]; then
-    # If we can't write to it, it's owned by root - need to fix via docker exec
-    if [ ! -w ~/.openclaw ]; then
-        echo "Warning: .openclaw directory has wrong ownership. Please run: docker exec -u root <container> chown -R agent:agent /home/agent/.openclaw"
-    fi
-fi
-echo "OpenClaw is installed. Run 'openclaw configure' to get started."
+echo "Starting OpenClaw Gateway..."
+openclaw gateway run &
+GATEWAY_PID=$!
+sleep 3
+echo "OpenClaw Gateway running (PID: $GATEWAY_PID)"
+echo "Run 'openclaw configure' to set up your API keys, then 'openclaw' to start chatting."
 exec ttyd -p 7681 -W bash
