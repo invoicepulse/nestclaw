@@ -1,20 +1,15 @@
 #!/bin/bash
-# Start OpenClaw Gateway with logging
+# Run initial setup (non-interactive, just creates config dirs)
+openclaw setup > /dev/null 2>&1
+
+# Now start gateway - config exists so no conflict
 openclaw gateway --port 18789 --allow-unconfigured > /tmp/openclaw-gateway.log 2>&1 &
-GATEWAY_PID=$!
 sleep 3
 
-# Check if gateway actually started
-if kill -0 $GATEWAY_PID 2>/dev/null; then
-    echo "Gateway started (PID: $GATEWAY_PID)"
+if kill -0 $! 2>/dev/null; then
+    echo "Gateway ready. Run: openclaw setup --wizard"
 else
-    echo "Gateway failed to start. Log:"
-    cat /tmp/openclaw-gateway.log
+    echo "Gateway log: $(cat /tmp/openclaw-gateway.log)"
 fi
-
-echo ""
-echo "Run: openclaw setup --wizard   (first time)"
-echo "Run: openclaw                  (to chat)"
-echo ""
 
 exec ttyd -p 7681 -W bash
