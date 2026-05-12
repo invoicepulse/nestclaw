@@ -1,9 +1,11 @@
 import { supabase } from './supabase';
 import type { ContainerWithUrls, User, ApiResponse } from '@shared/types';
 
+const API_URL = import.meta.env['VITE_API_URL'] ?? 'http://localhost:2222';
+
 async function authFetch<T>(url: string, options?: RequestInit): Promise<ApiResponse<T>> {
   const { data: { session } } = await supabase.auth.getSession();
-  const res = await fetch(url, {
+  const res = await fetch(`${API_URL}${url}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
