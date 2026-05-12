@@ -42,9 +42,16 @@ export default function Dashboard() {
           </div>
         )}
 
+        {!container && (
+          <div className="mt-6 text-center">
+            <a href="/onboarding" className="text-sm text-gray-400 hover:text-white">Get Started →</a>
+          </div>
+        )}
+
         <div className="mt-6 text-center">
-          <a href="https://polar.sh/settings" target="_blank" rel="noopener noreferrer"
-            className="text-sm text-gray-400 hover:text-white">Manage Billing →</a>
+          <a href="/onboarding" className="rounded-lg bg-brand-600 px-6 py-2 text-sm font-semibold text-white hover:bg-brand-700">
+            Add Container
+          </a>
         </div>
       </div>
     </div>

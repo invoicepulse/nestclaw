@@ -1,0 +1,15 @@
+{
+	admin localhost:2019
+}
+
+:80 {
+	handle /api/* {
+		reverse_proxy localhost:2222
+	}
+
+	handle {
+		root * /opt/nestclaw/apps/web/dist
+		try_files {path} /index.html
+		file_server
+	}
+}
