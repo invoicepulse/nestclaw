@@ -16,7 +16,7 @@ app.use(
   '*',
   cors({
     origin: process.env['NODE_ENV'] === 'production'
-      ? [`https://${process.env['DOMAIN'] ?? 'nestclaw.io'}`]
+      ? [`https://${process.env['DOMAIN'] ?? 'claive.live'}`, `https://www.${process.env['DOMAIN'] ?? 'claive.live'}`]
       : ['http://localhost:1111'],
     credentials: true,
   })
