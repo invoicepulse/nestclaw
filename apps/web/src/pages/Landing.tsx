@@ -1,7 +1,21 @@
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Lightning, Terminal, Robot } from '@phosphor-icons/react';
+import { useAuthStore } from '../store/auth';
 
 export default function Landing() {
+  const navigate = useNavigate();
+  const user = useAuthStore((s) => s.user);
+  const loading = useAuthStore((s) => s.loading);
+
+  useEffect(() => {
+    if (!loading && user) {
+      navigate('/dashboard');
+    }
+  }, [user, loading, navigate]);
+
+  if (loading) return null;
+
   return (
     <div className="min-h-screen bg-gray-950 text-white">
       {/* Hero */}
