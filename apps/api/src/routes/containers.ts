@@ -3,9 +3,12 @@ import { eq } from 'drizzle-orm';
 import { db, users, containers } from '../db';
 import { wakeContainer, isContainerRunning } from '../services/wake';
 import type { AuthEnv } from '../middleware/auth';
+import { authMiddleware } from '../middleware/auth';
 
 export const containersRouter = new Hono<AuthEnv>();
 const DOMAIN = process.env['DOMAIN'] ?? 'nestclaw.io';
+
+containersRouter.use('*', authMiddleware);
 
 containersRouter.get('/me', async (c) => {
   const authUser = c.get('user');

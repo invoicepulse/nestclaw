@@ -3,8 +3,11 @@ import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 import { db, users } from '../db';
 import type { AuthEnv } from '../middleware/auth';
+import { authMiddleware } from '../middleware/auth';
 
 export const usersRouter = new Hono<AuthEnv>();
+
+usersRouter.use('*', authMiddleware);
 
 usersRouter.get('/me', async (c) => {
   const authUser = c.get('user');
