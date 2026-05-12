@@ -27,8 +27,8 @@ app.get('/api/health', (c) => c.json({ status: 'ok', timestamp: new Date().toISO
 app.route('/api/webhooks', webhooksRouter);
 
 // Protected routes
-app.use('/api/users/*', authMiddleware);
-app.use('/api/containers/*', authMiddleware);
+usersRouter.use('*', authMiddleware);
+containersRouter.use('*', authMiddleware);
 app.route('/api/users', usersRouter);
 app.route('/api/containers', containersRouter);
 
